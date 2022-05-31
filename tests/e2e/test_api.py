@@ -6,7 +6,7 @@ import pathlib
 from fastapi.testclient import TestClient
 
 # Set root path
-PACKAGE_PARENT = pathlib.Path(__file__).parent.parent.parent
+PACKAGE_PARENT = pathlib.Path(__file__).parents[2]
 sys.path.append(str(PACKAGE_PARENT))
 
 # Import other modules
