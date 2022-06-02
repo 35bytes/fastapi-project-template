@@ -25,7 +25,7 @@ def test_create_user():
 
     response = client.post("/", json=body)
     assert response.status_code == 201
-    assert response.json() == None
+    assert response.json() == {"email": "test@123.cl"}
 
 
 def test_fail_create_user_because_password_dont_match():
