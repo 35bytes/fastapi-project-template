@@ -38,3 +38,15 @@ def test_fail_create_user_because_password_dont_match():
     response = client.post("/", json=body)
     assert response.status_code == 400
     assert response.json() == {"detail": "Passwords don't match"}
+
+
+def test_fail_because_email_is_not_valid():
+    body={
+        "email": "test",
+        "password": "123456", 
+        "password2": "123456"
+    }
+
+    response = client.post("/", json=body)
+    assert response.status_code == 422
+    assert response.json()["detail"][0]["msg"] == "value is not a valid email address"
