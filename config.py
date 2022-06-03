@@ -1,7 +1,10 @@
 import os
 from functools import lru_cache
 from pydantic import BaseSettings
+# from alembic import context
 
+
+####### Settings #######
 
 class Settings(BaseSettings):
     secret: str = os.getenv("SECRET")
@@ -18,3 +21,11 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings():
     return Settings()
+
+
+####### Database #######
+
+@lru_cache()
+def get_db_url():
+    settings = get_settings()
+    return f"{settings.db_dialect}://{settings.db_user}:{settings.db_password}@{settings.db_host}:{settings.db_port}/{settings.db_name}"
