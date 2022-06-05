@@ -6,7 +6,7 @@ from pydantic import BaseSettings
 ####### Settings #######
 
 class Settings(BaseSettings):
-    env_mode: str = os.getenv("SECRET")
+    env_mode: str = os.getenv("ENV_MODE")
     secret: str = os.getenv("SECRET")
     db_dialect: str = os.getenv("DB_DIALECT")
     db_host: str = os.getenv("DB_HOST")
@@ -21,9 +21,12 @@ class Settings(BaseSettings):
         return hash(tuple(self))
 
 
-def get_settings() -> Settings:
+@lru_cache()
+def get_settings(test_mode=False) -> Settings:
+    if test_mode:
+        return Settings(env_mode="test")
     return Settings()
-
+    
 
 ####### Database #######
 

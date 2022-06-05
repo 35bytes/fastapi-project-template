@@ -28,6 +28,5 @@ def test_config_value_for_test_env(config_test):
 
 
 def test_db_url_test_env(config_test):
-    assert config_test.env_mode == "test"
     url = get_db_url(settings=config_test)
     assert url == "sqlite://?check_same_thread=False"
