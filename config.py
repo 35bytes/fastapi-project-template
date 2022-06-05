@@ -6,6 +6,7 @@ from pydantic import BaseSettings
 ####### Settings #######
 
 class Settings(BaseSettings):
+    env_mode: str = "production"
     secret: str = os.getenv("SECRET")
     db_dialect: str = os.getenv("DB_DIALECT")
     db_host: str = os.getenv("DB_HOST")
