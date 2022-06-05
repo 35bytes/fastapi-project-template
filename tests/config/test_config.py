@@ -25,3 +25,9 @@ def test_db_url():
 
 def test_config_value_for_test_env(config_test):
     assert config_test.env_mode == "test"
+
+
+def test_db_url_test_env(config_test):
+    assert config_test.env_mode == "test"
+    url = get_db_url(test_mode=config_test.env_mode)
+    assert url == "sqlite://"

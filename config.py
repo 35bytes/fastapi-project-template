@@ -19,13 +19,15 @@ class Settings(BaseSettings):
 
 
 @lru_cache()
-def get_settings():
+def get_settings() -> Settings:
     return Settings()
 
 
 ####### Database #######
 
 @lru_cache()
-def get_db_url():
+def get_db_url(test_mode: bool=False) -> str:
+    if test_mode:
+        return "sqlite://"
     settings = get_settings()
     return f"{settings.db_dialect}://{settings.db_user}:{settings.db_password}@{settings.db_host}:{settings.db_port}/{settings.db_name}"
