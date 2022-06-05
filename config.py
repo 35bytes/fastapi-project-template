@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
+    def __hash__(self):
+        return hash(tuple(self))
+
 
 def get_settings() -> Settings:
     return Settings()
@@ -25,8 +28,7 @@ def get_settings() -> Settings:
 ####### Database #######
 
 @lru_cache()
-def get_db_url(test_mode: bool=get_settings().env_mode == "test") -> str:
-    if test_mode:
+def get_db_url(settings: Settings=get_settings()) -> str:
+    if settings.env_mode == "test":
         return "sqlite://"
-    settings = get_settings()
     return f"{settings.db_dialect}://{settings.db_user}:{settings.db_password}@{settings.db_host}:{settings.db_port}/{settings.db_name}"
