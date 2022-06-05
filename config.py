@@ -6,7 +6,7 @@ from pydantic import BaseSettings
 ####### Settings #######
 
 class Settings(BaseSettings):
-    env_mode: str = "production"
+    env_mode: str = os.getenv("SECRET")
     secret: str = os.getenv("SECRET")
     db_dialect: str = os.getenv("DB_DIALECT")
     db_host: str = os.getenv("DB_HOST")
@@ -18,7 +18,6 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 
-@lru_cache()
 def get_settings() -> Settings:
     return Settings()
 
@@ -26,7 +25,7 @@ def get_settings() -> Settings:
 ####### Database #######
 
 @lru_cache()
-def get_db_url(test_mode: bool=False) -> str:
+def get_db_url(test_mode: bool=get_settings().env_mode == "test") -> str:
     if test_mode:
         return "sqlite://"
     settings = get_settings()
