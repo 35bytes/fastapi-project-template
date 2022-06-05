@@ -2,7 +2,7 @@ import os
 from config import get_settings, get_db_url
 
 
-def test_assert_equal_2():
+def test_config_values():
     settings = get_settings()
     assert settings.secret == os.getenv("SECRET")
     assert settings.db_dialect == os.getenv("DB_DIALECT")
