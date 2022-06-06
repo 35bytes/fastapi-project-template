@@ -17,21 +17,15 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
-    def __hash__(self):
-        return hash(tuple(self))
-
 
 @lru_cache()
-def get_settings(test_mode=False) -> Settings:
-    if test_mode:
-        return Settings(env_mode="test")
+def get_settings() -> Settings:
     return Settings()
     
 
 ####### Database #######
 
 @lru_cache()
-def get_db_url(settings: Settings=get_settings()) -> str:
-    if settings.env_mode == "test":
-        return "sqlite://?check_same_thread=False"
+def get_db_url() -> str:
+    settings = get_settings()
     return f"{settings.db_dialect}://{settings.db_user}:{settings.db_password}@{settings.db_host}:{settings.db_port}/{settings.db_name}"

@@ -21,12 +21,3 @@ def test_config_values():
 def test_db_url():
     expected = f"{os.getenv('DB_DIALECT')}://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
     assert get_db_url() == expected
-
-
-def test_config_value_for_test_env(config_test):
-    assert config_test.env_mode == "test"
-
-
-def test_db_url_test_env(config_test):
-    url = get_db_url(settings=config_test)
-    assert url == "sqlite://?check_same_thread=False"

@@ -15,20 +15,5 @@ def load_env_variables():
 
 
 @pytest.fixture
-def config_test() -> Settings:
-    settings = get_settings(test_mode=True)
-    return settings
-
-
-@pytest.fixture
-def create_db_in_memory(config_test):
-    engine = create_engine(get_db_url(settings=config_test))
-    Base.metadata.create_all(engine)
-    yield
-    Base.metadata.drop_all(engine)
-
-
-@pytest.mark.usefixtures("create_db_in_memory")
-@pytest.fixture
 def client():
     return TestClient(app)
