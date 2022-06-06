@@ -20,9 +20,8 @@ def config_test() -> Settings:
     return settings
 
 
-@pytest.mark.usefixtures("config_test")
 @pytest.fixture
-def create_db_in_memory():
+def create_db_in_memory(config_test):
     engine = create_engine(get_db_url(settings=config_test))
     Base.metadata.create_all(engine)
     yield
