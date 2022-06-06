@@ -16,7 +16,6 @@ def load_env_variables():
 
 @pytest.fixture
 def config_test() -> Settings:
-    os.environ["ENV_MODE"] = "test"
     settings = get_settings(test_mode=True)
     return settings
 
