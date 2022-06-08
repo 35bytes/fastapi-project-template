@@ -9,6 +9,7 @@ This repository contains a base project to develop a microservice with FastAPI. 
 # Table of Contents
 
 - [Set environment variables](#set-environment-variables)
+- [Create Models](#create-models)
 - [Migrations](#migrations)
 
 # Set environment variables
@@ -63,6 +64,25 @@ from functools import lru_cache
 def get_db_url() -> str:
     settings = get_settings()
     return f"{settings.db_dialect}://{settings.db_user}:{settings.db_password}@{settings.db_host}:{settings.db_port}/{settings.db_name}"
+
+```
+
+# Create Models
+
+You can create all your **models** in `src/domain/models.py` with **sqlalchemy**. It is very important that the model classes extend from the Base class.
+
+```py
+from sqlalchemy import Column, Integer, String
+
+from src.adapters.orm import Base
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
 
 ```
 
