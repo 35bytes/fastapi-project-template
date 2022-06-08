@@ -1,5 +1,3 @@
-import time
-
 from fastapi import FastAPI, HTTPException, Depends
 from psycopg2.errors import UniqueViolation
 from sqlalchemy.orm import Session

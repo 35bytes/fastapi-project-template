@@ -16,6 +16,7 @@ This repository contains a base project to develop a microservice with FastAPI. 
     - [Manual](#manual)
   - [Apply migrations](#apply-migrations)
   - [Downgrade migrations](#downgrade-migrations)
+- [API entrypoints](#api-entrypoints)
 
 # Set environment variables
 
@@ -143,7 +144,7 @@ To apply the migrations in the database, the special alembic command must be exe
 alembic upgrade <head | int | revision_id>
 ```
 
-The `ids` of the revisions of the **applied migrations** will be saved in the `alembic_version` table in the database
+The `ids` of the revisions of the **applied migrations** will be saved in the `alembic_version` table in the database.
 
 ## Downgrade migrations
 
@@ -153,4 +154,39 @@ If you regret applying a migration you can undo the changes using a special alem
 alembic downgrade <base | -int | revision_id>
 ```
 
-When you apply a downgrade, the revision ids will be removed from the `alembic_version` table
+When you apply a downgrade, the revision ids will be removed from the `alembic_version` table.
+
+# API entrypoints
+
+To develop the API entrypoints you have to do it from the file `src/entrypoints/main.py`. The development of these APIs will made it by the FastAPI framework.
+
+To facilitate the work, `models`, `schemas` and `get_db` are imported from this file by default.
+
+```py
+from fastapi import FastAPI, HTTPException, Depends
+from psycopg2.errors import UniqueViolation
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
+
+from src.domain import schemas, models
+from src.adapters.orm import get_db
+
+app = FastAPI()
+
+
+@app.post("/", status_code=201, response_model=schemas.UserBase)
+async def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    if user.password != user.password2:
+        raise HTTPException(status_code=400, detail="Passwords don't match")
+
+    try:
+        new_user = models.User(email=user.email, hashed_password=user.password)
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+
+        return {"email": new_user.email}
+
+    except (IntegrityError, UniqueViolation):
+        raise HTTPException(status_code=400, detail="User already exists")
+```
