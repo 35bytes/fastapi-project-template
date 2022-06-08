@@ -19,6 +19,9 @@ This repository contains a base project to develop a microservice with FastAPI. 
   - [Downgrade migrations](#downgrade-migrations)
 - [API entrypoints](#api-entrypoints)
 - [Schemas](#schemas)
+- [Run server](#run-server)
+  - [Development](#development)
+  - [Production](#production)
 
 # Install dependencies
 
@@ -218,4 +221,24 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
     password2: str
+```
+
+# Run server
+
+The service can be run in 2 ways: **development** and **production**.
+
+## Development
+
+To start a development server to be able to test your project live, you can execute the special uvicorn command.
+
+```bash
+uvicorn src.entrypoints.main:app --reload
+```
+
+## Production
+
+To put the project into production it is no longer necessary for uvicorn to be reading the changes in the repository. In this case the execution of the server with uvicorn changes.
+
+```bash
+uvicorn src.entrypoints.main:app --host 0.0.0.0 --port 80
 ```
