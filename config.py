@@ -6,7 +6,6 @@ from pydantic import BaseSettings
 ####### Settings #######
 
 class Settings(BaseSettings):
-    env_mode: str = os.getenv("ENV_MODE")
     secret: str = os.getenv("SECRET")
     db_dialect: str = os.getenv("DB_DIALECT")
     db_host: str = os.getenv("DB_HOST")
@@ -25,6 +24,7 @@ def get_settings() -> Settings:
 
 ####### Database #######
 
+# DON'T DELETE THIS FUNCTION! IS USED BY ALEMBIC FOR MIGRATIONS AND SQLALCHEMY ORM
 @lru_cache()
 def get_db_url() -> str:
     settings = get_settings()

@@ -7,7 +7,6 @@ from config import get_settings, get_db_url
 @pytest.mark.usefixtures("load_env_variables")
 def test_config_values():
     settings = get_settings()
-    assert settings.env_mode == os.getenv('ENV_MODE')
     assert settings.secret == os.getenv("SECRET")
     assert settings.db_dialect == os.getenv("DB_DIALECT")
     assert settings.db_host == os.getenv("DB_HOST")
