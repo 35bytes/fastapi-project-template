@@ -8,6 +8,7 @@ This repository contains a base project to develop a microservice with FastAPI. 
 
 # Table of Contents
 
+- [Install dependencies](#install-dependencies)
 - [Set environment variables](#set-environment-variables)
 - [Create Models](#create-models)
 - [Migrations](#migrations)
@@ -19,11 +20,22 @@ This repository contains a base project to develop a microservice with FastAPI. 
 - [API entrypoints](#api-entrypoints)
 - [Schemas](#schemas)
 
+# Install dependencies
+
+In this repository there are 2 dependency files: `requirements.txt` and `test.requirements.txt`. These dependencies are separated in this way so that only what is necessary for production is installed, which will be defined in requirements.txt
+
+To install the dependencies you must execute the special pip command.
+
+```bash
+pip install -r requirements.txt         # Dependencies for production
+pip install -r test.requirements.txt    # Dependencies for development
+```
+
 # Set environment variables
 
 The `.env` file is **optional**, in which you can store the environment variables you want to load. This hosts the **secret** to perform password encryption and the variables to connect the service to the **database**.
 
-```
+```bash
 SECRET="my-secret-key"
 DB_DIALECT="postgresql"
 DB_HOST="localhost"
@@ -103,7 +115,7 @@ There are 2 ways to create migrations: **automatic** and **manual**. Files in th
 
 To create the migrations automatically, you must execute the special alembic command and set a name for the migration that is generated.
 
-```
+```bash
 alembic revision --autogenerate -m "Added users table"
 ```
 
@@ -113,7 +125,7 @@ alembic revision --autogenerate -m "Added users table"
 
 To create the migrations manually, the special alembic command must be executed and set a name for the migration that is generated.
 
-```
+```bash
 alembic revision -m "Added users table"
 ```
 
@@ -141,7 +153,7 @@ def downgrade() -> None:
 
 To apply the migrations in the database, the special alembic command must be executed. If you want apply the latest changes you must be executed with the value **head**. However, a certain number of migrations can also be executed by indicating a **numerical value**. There is also a third option where the **revision ID** can be referenced.
 
-```
+```bash
 alembic upgrade <head | int | revision_id>
 ```
 
@@ -151,7 +163,7 @@ The `ids` of the revisions of the **applied migrations** will be saved in the `a
 
 If you regret applying a migration you can undo the changes using a special alembic command. In a very similar way when applying an upgrade, the downgrade can take different values to undo the migrations, in this case they are: **base**, a **negative numerical value** or a **revision id**.
 
-```
+```bash
 alembic downgrade <base | -int | revision_id>
 ```
 
