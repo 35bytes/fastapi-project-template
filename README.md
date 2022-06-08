@@ -12,6 +12,10 @@ This repository contains a base project to develop a microservice with FastAPI. 
 - [Create Models](#create-models)
 - [Migrations](#migrations)
   - [Create migrations](#create-migrations)
+    - [Automatic](#automatic)
+    - [Manual](#manual)
+  - [Apply migrations](#apply-migrations)
+  - [Downgrade migrations](#downgrade-migrations)
 
 # Set environment variables
 
@@ -103,14 +107,50 @@ alembic revision --autogenerate -m "Added users table"
 
 **It is important to completely review the generated migrations and modify/remove unnecessary code blocks.**
 
+## Manual
+
+To create the migrations manually, the special alembic command must be executed and set a name for the migration that is generated.
+
+```
+alembic revision -m "Added users table"
+```
+
+A file will be created in the `alembic/versions` folder with the name `*_create_users.py`. To create the necessary fields you must use **sqlalchemy**.
+
+```py
+def upgrade() -> None:
+    op.create_table('users',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('email', sa.String(), nullable=True),
+    sa.Column('hashed_password', sa.String(), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
+    op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
+
+
+def downgrade() -> None:
+    op.drop_index(op.f('ix_users_id'), table_name='users')
+    op.drop_index(op.f('ix_users_email'), table_name='users')
+    op.drop_table('users')
+```
+
 ## Apply migrations
 
-```
-alembic upgrade head
-```
-
-To downgrade the migrations execute
+To apply the migrations in the database, the special alembic command must be executed. If you want apply the latest changes you must be executed with the value **head**. However, a certain number of migrations can also be executed by indicating a **numerical value**. There is also a third option where the **revision ID** can be referenced.
 
 ```
-alembic downgrade <base | -int>
+alembic upgrade <head | int | revision_id>
 ```
+
+The `ids` of the revisions of the **applied migrations** will be saved in the `alembic_version` table in the database
+
+## Downgrade migrations
+
+If you regret applying a migration you can undo the changes using a special alembic command. In a very similar way when applying an upgrade, the downgrade can take different values to undo the migrations, in this case they are: **base**, a **negative numerical value** or a **revision id**.
+
+```
+alembic downgrade <base | -int | revision_id>
+```
+
+When you apply a downgrade, the revision ids will be removed from the `alembic_version` table
