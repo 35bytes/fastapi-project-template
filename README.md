@@ -17,6 +17,7 @@ This repository contains a base project to develop a microservice with FastAPI. 
   - [Apply migrations](#apply-migrations)
   - [Downgrade migrations](#downgrade-migrations)
 - [API entrypoints](#api-entrypoints)
+- [Schemas](#schemas)
 
 # Set environment variables
 
@@ -189,4 +190,20 @@ async def register_user(user: schemas.UserCreate, db: Session = Depends(get_db))
 
     except (IntegrityError, UniqueViolation):
         raise HTTPException(status_code=400, detail="User already exists")
+```
+
+# Schemas
+
+FastAPI can use schemas to define the structure of the request and response. In this project you can create your schemas in the file `src/domain/schemas.py`.
+
+```py
+from pydantic import BaseModel, EmailStr
+
+
+class UserBase(BaseModel):
+    email: EmailStr
+
+class UserCreate(UserBase):
+    password: str
+    password2: str
 ```
