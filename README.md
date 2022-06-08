@@ -11,6 +11,7 @@ This repository contains a base project to develop a microservice with FastAPI. 
 - [Set environment variables](#set-environment-variables)
 - [Create Models](#create-models)
 - [Migrations](#migrations)
+  - [Create migrations](#create-migrations)
 
 # Set environment variables
 
@@ -88,7 +89,21 @@ class User(Base):
 
 # Migrations
 
-To apply migrations execute
+## Create migrations
+
+There are 2 ways to create migrations: **automatic** and **manual**. Files in the `alembic/versions` folder **must be deleted**.
+
+## Automatic
+
+To create the migrations automatically, you must execute the special alembic command and set a name for the migration that is generated.
+
+```
+alembic revision --autogenerate -m "Added users table"
+```
+
+**It is important to completely review the generated migrations and modify/remove unnecessary code blocks.**
+
+## Apply migrations
 
 ```
 alembic upgrade head
