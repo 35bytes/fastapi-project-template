@@ -22,6 +22,7 @@ This repository contains a base project to develop a microservice with FastAPI. 
 - [Run server](#run-server)
   - [Development](#development)
   - [Production](#production)
+- [Test](#tests)
 
 # Install dependencies
 
@@ -242,3 +243,35 @@ To put the project into production it is no longer necessary for uvicorn to be r
 ```bash
 uvicorn src.entrypoints.main:app --host 0.0.0.0 --port 80
 ```
+
+# Tests
+
+In the repository there is a folder structure to differentiate the types of tests: **config**, **unit**, **integration** and **end to end**. The tests are carried out with Pytest and the **configuration** of the tests is carried out in `tests/conftest.py`.
+
+To install the development and test dependencies, you have to install the packages in the file `test.requirements.txt`.
+
+```bash
+pip install -r test.requirements.txt
+```
+
+One of the default configurations that exists in the file is to create a **FastAPI client that uses an in-memory database**. The benefit of this client is to be able to carry out **end to end** tests without harming any external base, facilitating the development of the tests.
+
+To run the tests, simply use the special **Pytest** command.
+
+```bash
+pytest  # Execute all tests in tests folder
+```
+
+In the dependencies package there is **pytest-cov**, with this package we can check the coverage of the tests throughout the code.
+
+```bash
+pytest --cov=myproj tests/  # This line will display the result report in terminal
+```
+
+There is also an option to generate an **html file** to review the coverage of each code block in the project.
+
+```bash
+pytest --cov-report html --cov=. tests/
+```
+
+This generates the `htmlcov/index.html` file which you can open with your web browser and navigate through the lines of code to see what is covered by the tests and what is not.
